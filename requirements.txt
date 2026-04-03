@@ -1,0 +1,6 @@
+django
+djangorestframework
+django-cors-headers
+python-dotenv
+drf-spectacular    # Для крутой документации API
+psycopg2-binary    # Для PostgreSQL
