@@ -23,7 +23,7 @@ urlpatterns = [
     
     # --- Игровая социалка и бонусы ---
     # Топ игроков по звездам
-    path('leaderboard/', LeaderboardView.as_view(), name='leaderboard'),
+    # path('leaderboard/', LeaderboardView.as_view(), name='leaderboard'),
     
     # Забрать ежедневные монеты
     path('daily-reward/', DailyRewardView.as_view(), name='daily-reward'),

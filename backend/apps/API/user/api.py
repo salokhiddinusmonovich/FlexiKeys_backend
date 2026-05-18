@@ -124,41 +124,6 @@ class ProfileView(APIView):
         # Возвращаем обновленный профиль через основной сериализатор
         return Response(ProfileSerializer(profile).data)
     
-class LeaderboardView(APIView):
-    permission_classes = [IsAuthenticated]
-    @extend_schema(
-        summary="Топ игроков по звездам",
-        responses={
-            200: inline_serializer(
-                name='LeaderboardResponse',
-                many=True,
-                fields={
-                    'rank': serializers.IntegerField(),
-                    'nickname': serializers.CharField(),
-                    'stars': serializers.IntegerField(),
-                    'level': serializers.IntegerField(),
-                    'is_me': serializers.BooleanField(),
-                }
-            )
-        },
-        tags=['Social']
-    )
-
-    @extend_schema(summary="Топ игроков по звездам")
-    def get(self, request):
-        # Берем топ-10 детей, исключая пустые профили
-        top_players = ChildProfile.objects.filter(stars__gt=0).order_by('-stars')[:10]
-        
-        data = []
-        for i, p in enumerate(top_players, 1):
-            data.append({
-                "rank": i,
-                "nickname": p.nickname,
-                "stars": p.stars,
-                "level": p.current_level,
-                "is_me": p.user == request.user # Чтобы ребенок видел себя в списке
-            })
-        return Response(data)
     
 class DailyRewardView(APIView):
     permission_classes = [IsAuthenticated]
@@ -214,3 +179,41 @@ class LanguageListView(APIView):
         languages = Language.objects.all()
         serializer = LanguageSerializer(languages, many=True)
         return Response(serializer.data)
+    
+
+
+# class LeaderboardView(APIView):
+#     permission_classes = [IsAuthenticated]
+#     @extend_schema(
+#         summary="Топ игроков по звездам",
+#         responses={
+#             200: inline_serializer(
+#                 name='LeaderboardResponse',
+#                 many=True,
+#                 fields={
+#                     'rank': serializers.IntegerField(),
+#                     'nickname': serializers.CharField(),
+#                     'stars': serializers.IntegerField(),
+#                     'level': serializers.IntegerField(),
+#                     'is_me': serializers.BooleanField(),
+#                 }
+#             )
+#         },
+#         tags=['Social']
+#     )
+
+#     @extend_schema(summary="Топ игроков по звездам")
+#     def get(self, request):
+#         # Берем топ-10 детей, исключая пустые профили
+#         top_players = ChildProfile.objects.filter(stars__gt=0).order_by('-stars')[:10]
+        
+#         data = []
+#         for i, p in enumerate(top_players, 1):
+#             data.append({
+#                 "rank": i,
+#                 "nickname": p.nickname,
+#                 "stars": p.stars,
+#                 "level": p.current_level,
+#                 "is_me": p.user == request.user # Чтобы ребенок видел себя в списке
+#             })
+#         return Response(data)
